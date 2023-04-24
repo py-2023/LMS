@@ -1,0 +1,29 @@
+{% extends "common-fragments/layout.html" %}
+
+
+
+
+{% block content %}
+<form class='text-center mt-5 container' style="width: 60%;" method="post" action="/issuebook">
+
+{{ form.csrf_token }}
+    <div class="input-group mb-3">
+  <h3 class='text-center'>Select Book for Issue </h3 >
+   &nbsp;
+
+        <select name="book" class="form-control" required autofocus placeholder='Select Book for Issuing'>
+
+            {% for book in books %}
+            {% if book.availablenoofcopies==0 or (book in current_user.book) %}
+            <option value='{{ book.id }}' name='book_id' disabled> Title: {{ book.title }} - Author: {{ book.authors }} - ISBN : {{ book.isbn}} }}</option>
+            {% elif request.args.get('book') == book.id %}
+            <option value='{{ book.id }}' name=book_id' selected>Title: {{ book.title }} - Author {{ book.authors }} - ISBN : {{ book.isbn}}</option>
+            {% else %}
+            <option value='{{ book.id }}' name='book_id'>Title: {{ book.title }} - Author {{ book.authors }} - ISBN : {{ book.isbn}}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+    </div>
+    <button class='btn btn-lg btn-primary btn-block' type='submit'>Submit</button>
+</form>
+{% endblock %}

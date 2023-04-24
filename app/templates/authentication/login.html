@@ -1,0 +1,36 @@
+{% extends "common-fragments/layout.html" %}
+
+{% block content %}
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <main class="form-signin w-100 m-auto">
+
+        <br>
+        <br>
+        <br>
+      <form role="form" method="post" action="">
+               {{ form.csrf_token }}
+
+
+        <div class="form-floating">
+          <input class="form-control mb-2" id="userid" name="userid" placeholder="userid" required type="text" value="">
+          <label for="userid">User ID</label>
+
+        </div>
+        <div class="form-floating">
+          <input class="form-control mb-2" id="password" name="password" placeholder="password" required type="password" value="">
+          <label for="password">Password</label>
+
+        </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Sign in</button>
+        <p class="text-center mt-3">New User? <a href="/register">Register now</a></p>
+      </form>
+    </main>
+  </div>
+  <div class="col-md-4"></div>
+</div>
+
+
+
+{% endblock %}

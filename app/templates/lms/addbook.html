@@ -1,0 +1,173 @@
+{% extends "common-fragments/layout.html" %}
+
+{% block content %}
+
+
+
+
+
+
+
+<div class="row">
+  <div class="col-md-4"></div>
+  <div class="col-md-4">
+    <main class="form-signin w-100 m-auto">
+      <form role="form" method="post" action="">
+        {{ form.csrf_token }}
+        <h1 class="h3 mb-3 fw-normal text-center">Add Book</h1>
+
+       <div class="form-floating">
+          {{ form.title(placeholder="Book Title", class="form-control mb-2") }}
+          {{ form.title.label }}
+            {% if form.title.errors %}
+              {% for error in form.title.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+
+      <div class="form-floating">
+          {{ form.authors(placeholder="Authors", class="form-control mb-2") }}
+          {{ form.authors.label }}
+            {% if form.authors.errors %}
+              {% for error in form.authors.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+
+
+
+
+
+
+        <div class="form-floating">
+          {{ form.publisher(placeholder="Publisher", class="form-control mb-2") }}
+          {{ form.publisher.label }}
+            {% if form.publisher.errors %}
+              {% for error in form.publisher.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+
+
+        <div class="form-floating">
+          {{ form.edition(placeholder="Edition", class="form-control mb-2") }}
+          {{ form.edition.label }}
+            {% if form.edition.errors %}
+              {% for error in form.edition.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+
+
+
+        <div class="form-floating">
+          {{ form.isbn(placeholder="ISBN", class="form-control mb-2") }}
+          {{ form.isbn.label }}
+            {% if form.isbn.errors %}
+              {% for error in form.isbn.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+        <div class="form-floating">
+          {{ form.shelfnum(placeholder="Shelf Number", class="form-control mb-2") }}
+          {{ form.shelfnum.label }}
+            {% if form.shelfnum.errors %}
+              {% for error in form.shelfnum.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+
+        <div class="form-floating">
+          {{ form.description(placeholder="Description", class="form-control mb-2") }}
+          {{ form.description.label }}
+            {% if form.description.errors %}
+              {% for error in form.description.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+
+
+
+
+        <div class="form-floating">
+          {{ form.totalnoofcopies(placeholder="No of Copies", class="form-control mb-2") }}
+          {{ form.totalnoofcopies.label }}
+            {% if form.totalnoofcopies.errors %}
+              {% for error in form.totalnoofcopies.errors %}
+                <div class="alert alert-danger" role="alert">
+                  {{ error }}
+                </div>
+              {% endfor %}
+            {% endif %}
+        </div>
+
+
+
+
+
+
+
+
+
+
+<br>
+
+
+
+
+
+
+
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Submit</button>
+           </form>
+    </main>
+  </div>
+  <div class="col-md-4"></div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

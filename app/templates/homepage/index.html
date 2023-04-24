@@ -1,0 +1,129 @@
+{% extends 'common-fragments/layout.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+        <div>
+
+
+			<h2>Welcome  {{session.name}}  </h2>
+
+
+		</div>
+
+
+
+
+    <br>
+
+
+
+    <div class="row row-cols-1 row-cols-md-3 g-4">
+
+
+  <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">Issue a Book</h5>
+
+       <a href="/issuebook" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+
+
+  <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">Renew a Book</h5>
+
+       <a href="#" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+
+
+  <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">Return a Book</h5>
+
+       <a href="/returnbook" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+  <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">Search a Book</h5>
+
+       <a href="#" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+
+  <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">Current Issued Book List</h5>
+
+       <a href="#" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+
+  <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">Add Book to Library</h5>
+
+       <a href="/addbook" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+
+
+
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+{% endblock %}

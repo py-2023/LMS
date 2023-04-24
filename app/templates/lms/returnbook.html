@@ -1,0 +1,24 @@
+{% extends "common-fragments/layout.html" %}
+
+
+
+
+{% block content %}
+
+
+<<form class='text-center mt-5 container' style="width: 60%;" method="post" action="/returnbook">
+
+{{ form.csrf_token }}
+    <div class="input-group mb-3">
+     <h3 class='text-center'>Select Book for Return &nbsp; &nbsp; </h3 >
+
+        <select name="book" class="form-control" required autofocus placeholder='Select'>
+            {% for book in booksissued %}
+            <option value='{{ book.bookissuance.id }}' name='book'>Title: {{ book.bookissuance.title }} - Author: {{ book.bookissuance.authors }} - ISBN : {{ book.bookissuance.isbn}} </option>
+            {% endfor %}
+        </select>
+    </div>
+
+    <button class='btn btn-lg btn-primary btn-block' type='submit'>Submit</button>
+</form>
+{% endblock %}

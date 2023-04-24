@@ -1,0 +1,11 @@
+$ flask db init
+This will add a migrations folder to your application. The contents of this folder need to be added to version control along with your other source files.
+
+You can then generate an initial migration:
+
+$ flask db migrate -m "Initial migration."
+The migration script needs to be reviewed and edited, as Alembic is not always able to detect every change you make to your models. In particular, Alembic is currently unable to detect table name changes, column name changes, or anonymously named constraints. A detailed summary of limitations can be found in the Alembic autogenerate documentation. Once finalized, the migration script also needs to be added to version control.
+
+Then you can apply the changes described by the migration script to your database:
+
+$ flask db upgrade
