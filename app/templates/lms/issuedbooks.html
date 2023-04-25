@@ -1,0 +1,28 @@
+{% extends "common-fragments/layout.html" %}
+
+
+
+
+{% block content %}
+
+
+   <h3> Current Issued Book List for user</h3>
+  {% for book in booksissued %}
+
+
+   <div class="card">
+  <div class="card-body">
+
+              Title: {{ book.bookissuance.title }} - Author: {{ book.bookissuance.authors }} - ISBN : {{ book.bookissuance.isbn}}
+  </div>
+</div>
+
+
+
+
+
+
+      {% endfor %}
+
+
+{% endblock %}

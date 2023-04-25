@@ -14,7 +14,7 @@ class RegisterForm(FlaskForm):
     username = StringField("User Name", validators=[DataRequired()])
     email = EmailField("Email", validators=[DataRequired(), Email(message=None), Length(min=6, max=40)])
     mobile = StringField("Mobile", validators=[DataRequired()])
-    is_admin = BooleanField('is Admin ?')
+    #is_admin = BooleanField('is Admin ?')
     is_active = BooleanField('is Active ?', validators=[DataRequired()])
 
     password = PasswordField(

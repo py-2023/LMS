@@ -8,7 +8,7 @@
         <div>
 
 
-			<h2>Welcome  {{session.name}}  </h2>
+			<h2>Welcome  {{session.name}}   [ UserID: {{ current_user.userid }} ]</h2>
 
 
 		</div>
@@ -45,7 +45,7 @@
     <h5 class="card-title"></h5>
       <h5 class="card-text">Renew a Book</h5>
 
-       <a href="#" class="card-text stretched-link"></a>
+       <a href="/renewbook" class="card-text stretched-link"></a>
   </div>
 </div>
   </div>
@@ -73,7 +73,7 @@
     <h5 class="card-title"></h5>
       <h5 class="card-text">Search a Book</h5>
 
-       <a href="#" class="card-text stretched-link"></a>
+       <a href="/searchbooks" class="card-text stretched-link"></a>
   </div>
 </div>
   </div>
@@ -87,7 +87,7 @@
     <h5 class="card-title"></h5>
       <h5 class="card-text">Current Issued Book List</h5>
 
-       <a href="#" class="card-text stretched-link"></a>
+       <a href="/issuedbooks" class="card-text stretched-link"></a>
   </div>
 </div>
   </div>

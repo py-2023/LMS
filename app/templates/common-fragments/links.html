@@ -6,7 +6,13 @@
           <li><a href="{{ url_for('homepage.index') }}" class="nav-link px-8 text-white"><h3>Library Management System</h3></a></li>
       </ul>
 
+    <div class="text-start">
+    <a href="{{ url_for('homepage.index') }}"><button type="button" class="btn btn-outline-light me-2">Home</button></a>
+
+    </div>
+
       <div class="text-end">
+
         {% if current_user.is_authenticated %}
         <a href="{{ url_for('authentication.logout') }}"><button type="button" class="btn btn-outline-light me-2">Logout</button></a>
         {% else %}

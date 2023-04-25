@@ -59,7 +59,7 @@ def register():
     if form.validate_on_submit():
         user = User(password=form.password.data, username=form.username.data,
                     mobile=form.mobile.data,
-                    email=form.email.data, is_admin=form.is_admin.data, is_active=form.is_active.data)
+                    email=form.email.data, is_active=form.is_active.data)
 
         try:
             db.session.add(user)

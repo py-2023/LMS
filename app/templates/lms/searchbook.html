@@ -1,0 +1,45 @@
+{% extends "common-fragments/layout.html" %}
+
+
+
+
+{% block content %}
+
+    <div>
+
+    <form role="form" method="post" action="/searchbooks">
+               {{ form.csrf_token }}
+
+
+        <div class="form-floating">
+          <input class="form-control mb-2" id="title" name="title" placeholder="title" required type="text" value="">
+          <label for="userid">Book Title</label>
+
+           </div>
+        <button class="w-100 btn btn-lg btn-primary" type="submit">Search</button>
+
+      </form>
+
+
+    </div>
+    <br>
+    <br>
+  {% for book in searchresult %}
+
+
+   <div class="card">
+  <div class="card-body">
+
+              Title: {{ book.title }} - Author: {{ book.authors }} - ISBN : {{ book.isbn}}
+  </div>
+</div>
+
+
+
+
+
+
+      {% endfor %}
+
+
+{% endblock %}

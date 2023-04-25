@@ -1,0 +1,50 @@
+{% extends "common-fragments/layout.html" %}
+
+
+
+
+{% block content %}
+
+  {% for book in booksissued %}
+
+
+
+
+
+<<form class= "container-fluid" style="width: 60%;" method="post" action="/returnbook">
+
+{{ form.csrf_token }}
+
+
+
+    <div class="input-group input-group-lg">
+     <h3 class='text-center'>Select Book for Renewal &nbsp; &nbsp; </h3 >
+
+        <div class="card">
+  <div class="card-body">
+              Title: {{ book.bookissuance.title }} - Author: {{ book.bookissuance.authors }} - ISBN : {{ book.bookissuance.isbn}}
+  </div>
+</div>
+
+
+
+         <div class="invisible">>
+          <input class="invisible" name="book" required type="hidden" value='{{ book.bookissuance.id }}' >
+
+
+        </div>
+
+
+
+    </div>
+
+
+
+
+    <button class='btn btn-lg btn-primary btn-block' type='submit'>Submit</button>
+</form>
+
+      {% endfor %}
+
+
+{% endblock %}

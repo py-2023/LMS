@@ -40,3 +40,36 @@ class IssueBookForm(FlaskForm):
             return False
         ## write other validations
         return True
+
+
+
+class SearchBookForm(FlaskForm):
+    title = StringField("Book Title")
+    authors = StringField("Authors")
+    isbn = StringField("ISBN")
+
+    def validate(self, extra_validators=None):
+        initial_validation = super(SearchBookForm, self).validate()
+        if not initial_validation:
+            return False
+        ## write other validations
+        return True
+
+
+
+
+class RenewBookForm(FlaskForm):
+    book = StringField("Book Title", validators=[DataRequired()])
+    issued_to = StringField("Issued To", validators=[DataRequired()])
+    issued_date = StringField("Issuance Date", validators=[DataRequired()])
+    to_be_returned_by_date = StringField("To be Returned by", validators=[DataRequired()])
+    actual_return_date = StringField("Actual Return Date")
+    returnstatus = SelectField("Return Status", choices=[(choice.name, choice.value) for choice in ReturnStatus])
+
+
+    def validate(self, extra_validators=None):
+        initial_validation = super(RenewBookForm, self).validate()
+        if not initial_validation:
+            return False
+        ## write other validations
+        return True

@@ -29,8 +29,8 @@ class User(UserMixin, db.Model):
     def get_id(self):
         return self.userid
 
-    def is_admin(self):
-        return self.is_admin
+    #def is_admin(self):
+    #    return self.is_admin
 
     def __repr__(self):
         return '<User {}>'.format(self.username)
