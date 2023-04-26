@@ -24,6 +24,22 @@
             {% endfor %}
         </select>
     </div>
+
+<div>
+
+    <h3 class='text-center'>Select Member to Issue </h3 >
+   <select name="issued_to" class="form-control" required autofocus placeholder='Select Memeber  for Issuing'>
+
+
+        {% for user in users %}
+
+            <option value='{{ user.userid }}' name='issued_to'> {{ user.username }} -- {{ user.userid }}  </option>
+
+      {% endfor %}
+        </select>
+
+</div>
+
     <button class='btn btn-lg btn-primary btn-block' type='submit'>Submit</button>
 </form>
 {% endblock %}

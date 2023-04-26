@@ -6,6 +6,7 @@ from app.auth.models import User, ReturnStatus
 
 
 class AddBookForm(FlaskForm):
+
     title = StringField("Book Title", validators=[DataRequired()])
     authors = StringField("Authors", validators=[DataRequired()])
     publisher = StringField("Publisher", validators=[DataRequired()])
@@ -26,12 +27,24 @@ class AddBookForm(FlaskForm):
 
 
 class IssueBookForm(FlaskForm):
+
     book = StringField("Book Title", validators=[DataRequired()])
-    issued_to = StringField("Issued To", validators=[DataRequired()])
+    #issued_to = StringField("Issued To", validators=[DataRequired()])
+    issued_to = SelectField("Issued To")
     issued_date = StringField("Issuance Date", validators=[DataRequired()])
     to_be_returned_by_date = StringField("To be Returned by", validators=[DataRequired()])
     actual_return_date = StringField("Actual Return Date")
     returnstatus = SelectField("Return Status", choices=[(choice.name, choice.value) for choice in ReturnStatus])
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        users = User.query.filter_by().all()
+
+        self.issued_to.choices = [
+            (user, user) for user in users
+        ]
+
 
 
     def validate(self, extra_validators=None):

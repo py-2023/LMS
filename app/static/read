@@ -9,3 +9,6 @@ The migration script needs to be reviewed and edited, as Alembic is not always a
 Then you can apply the changes described by the migration script to your database:
 
 $ flask db upgrade
+flask run
+
+flask db migrate -m "2"
