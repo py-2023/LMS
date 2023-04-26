@@ -42,7 +42,7 @@ class RegisterForm(FlaskForm):
             return False
         user = User.query.filter_by(mobile=self.mobile.data).first()
         if user:
-            self.email.errors.append("Mobil name already registered")
+            self.email.errors.append("Mobile name already registered")
             return False
 
 
