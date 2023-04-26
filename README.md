@@ -1,6 +1,6 @@
 # LMS
 
-Librarian/ Admin
+Librarian
 Userid : 1
 password : April@2023
 
@@ -10,9 +10,9 @@ User Id 2:
 password: April@2023
 
 
-User can do self registration or Admin can add users
+User can do self registration or Librarian can add users [ Name, Mobile and Email  should be distinct for each user]
 
-But only admin can access admin console.
+But only Librarian can access Library dashboard
 
 ______________________________________________________________________________________
 
