@@ -6,23 +6,64 @@
 {% block content %}
 
 
-   <h3> Current Issued Book List </h3>
-  {% for book in booksissued %}
-
-
-   <div class="card">
-  <div class="card-body">
-
-              Title: {{ book.bookissuance.title }} - Author: {{ book.bookissuance.authors }} - ISBN : {{ book.bookissuance.isbn}}
-  </div>
-</div>
+   <h3> Current Issued Books</h3>
 
 
 
+    <br>
+
+<table  class="table table-hover">
+  <thead>
+    <tr>
+      <th scope="col">Title</th>
+      <th scope="col">Authors</th>
+      <th scope="col">Publisher</th>
+      <th scope="col">ISBN</th>
+      <th scope="col">username</th>
+        <th scope="col">Issued On</th>
+                <th scope="col">Returned On</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for record in booksissued %}
+
+    <tr>
+
+      <td>{{ record.bookissuance.title }}</td>
+    <td>{{ record.bookissuance.authors }}</td>
+     <td>{{ record.bookissuance.publisher }}</td>
+     <td>{{ record.bookissuance.isbn }}</td>
+     <td>{{ record.bookissuancebyuser.username }}</td>
+             <td>
+                            {% if record.issuance_date %}
+                 {{ record.issuance_date.strftime('%d-%m-%Y')  }}
+              {% else %} - {% endif %}
+
+
+             </td>
+
+             <td>
+
+                 {% if record.actual_return_date %}
+                 {{ record.actual_return_date.strftime('%d-%m-%Y')  }}
+              {% else %} - {% endif %}
+
+
+             </td>
+
+
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
 
 
 
-      {% endfor %}
+
+
 
 
 {% endblock %}

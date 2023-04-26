@@ -5,46 +5,96 @@
 
 {% block content %}
 
-  {% for book in booksissued %}
 
 
 
+<table  class="table table-hover">
+  <thead>
+    <tr>
+         <th scope="col">Renew</th>
+      <th scope="col">Title</th>
+      <th scope="col">Authors</th>
+      <th scope="col">Publisher</th>
+      <th scope="col">ISBN</th>
+      <th scope="col">username</th>
+        <th scope="col">Issued On</th>
+                <th scope="col">To be Returned On</th>
+
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for record in booksissued %}
+
+    <tr>
+    <td>
 
 
-<<form class= "container-fluid" style="width: 60%;" method="post" action="/renewbook">
+<form class= "container-fluid" style="width: 60%;" method="post" action="/renewbook">
 
 {{ form.csrf_token }}
 
 
 
-    <div class="input-group input-group-lg">
-     <h3 class='text-center'>Select Book for Renewal &nbsp; &nbsp; </h3 >
 
-        <div class="card">
-  <div class="card-body">
-              Title: {{ book.bookissuance.title }} - Author: {{ book.bookissuance.authors }} - ISBN : {{ book.bookissuance.isbn}}
-  </div>
-</div>
-
-
-
-         <div class="invisible">>
-          <input class="invisible" name="book" required type="hidden" value='{{ book.bookissuance.id }}' >
-
-
-        </div>
-
-
-
-    </div>
+          <input class="invisible" name="book" required type="hidden" value='{{ record.bookissuance.id }}' >
 
 
 
 
-    <button class='btn btn-lg btn-primary btn-block' type='submit'>Submit</button>
+
+
+
+    <button class='btn btn-sm btn-warning btn-block' type='submit'>Renew</button>
 </form>
 
-      {% endfor %}
+
+
+
+
+
+
+
+    </td>
+
+      <td>{{ record.bookissuance.title }}</td>
+    <td>{{ record.bookissuance.authors }}</td>
+     <td>{{ record.bookissuance.publisher }}</td>
+     <td>{{ record.bookissuance.isbn }}</td>
+     <td>{{ record.bookissuancebyuser.username }}</td>
+             <td>
+
+
+                 {% if record.issuance_date %}
+                 {{ record.issuance_date.strftime('%d-%m-%Y')  }}
+              {% else %} - {% endif %}
+
+
+
+
+
+
+             </td>
+
+             <td>
+
+                 {% if record.to_be_returned_by_date %}
+                 {{ record.to_be_returned_by_date.strftime('%d-%m-%Y')  }}
+              {% else %} - {% endif %}
+
+
+             </td>
+
+
+    </tr>
+
+    {% endfor %}
+  </tbody>
+
+
+
+
+
 
 
 {% endblock %}

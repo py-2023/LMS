@@ -20,9 +20,7 @@ def load_user(userid):
 
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
-    if current_user.is_authenticated:
-        flash("You are already logged in.", "info")
-        return redirect(url_for("homepage.index"))
+
     form = LoginForm(request.form)
     if form.validate_on_submit():
         print("validating form")
@@ -31,9 +29,22 @@ def login():
         if user and bcrypt.check_password_hash(user.password, request.form["password"]):
             login_user(user)
 
+            is_admin=user.is_admin
+
+
             ## check user role,
             ## if its admin user show role selection screen or take to  admin view
             ## admin view can only be accessed by admin users
+
+            # Only Librarian is allowed to login and operate
+
+            if not current_user.is_admin:
+                flash("Please contact Librarian to Issue/ Renew/ Return Books through the portal", "info")
+                logout_user
+                return redirect(url_for("authentication.login"))
+
+
+
             return redirect(url_for("homepage.index"))
         else:
             flash("Invalid email and/or password.", "danger")

@@ -4,12 +4,27 @@
 
 
 {% block content %}
-<form class='text-center mt-5 container' style="width: 60%;" method="post" action="/issuebook">
+
+
+
+
+
+<form  method="post" action="/issuebook">
 
 {{ form.csrf_token }}
-    <div class="input-group mb-3">
-  <h3 class='text-center'>Select Book for Issue </h3 >
-   &nbsp;
+
+<div class="container">
+
+
+<table  class="table table-hover">
+<tbody>
+<tr>
+    <td>
+      <h4 class='text-center'>Select Book for Issue </h4 >
+
+</td>
+
+   &nbsp;<td>
 
         <select name="book" class="form-control" required autofocus placeholder='Select Book for Issuing'>
 
@@ -23,11 +38,16 @@
             {% endif %}
             {% endfor %}
         </select>
-    </div>
 
-<div>
+</td>
+</tr>
+<tr>
+<td>
 
-    <h3 class='text-center'>Select Member to Issue </h3 >
+    <h4 class='text-center'>Select Member to Issue </h4 >
+</td>
+
+<td>
    <select name="issued_to" class="form-control" required autofocus placeholder='Select Memeber  for Issuing'>
 
 
@@ -38,8 +58,24 @@
       {% endfor %}
         </select>
 
-</div>
 
-    <button class='btn btn-lg btn-primary btn-block' type='submit'>Submit</button>
+
+</td>
+</tr>
+<tr>
+    <td colspan="2">&nbsp;</td>
+    <td colspan="1">
+
+           <button class='btn btn-sm btn-primary btn-block' type='submit'>Issue Book</button>
+    </td>
+</tr>
+</tbody>
+
+</table>
+
+
+    </div>
 </form>
+
+
 {% endblock %}
