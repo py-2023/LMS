@@ -15,7 +15,7 @@ class RegisterForm(FlaskForm):
     email = EmailField("Email", validators=[DataRequired(), Email(message=None), Length(min=6, max=40)])
     mobile = StringField("Mobile", validators=[DataRequired()])
     #is_admin = BooleanField('is Admin ?')
-    is_active = BooleanField('is Active ?', validators=[DataRequired()])
+    #is_active = BooleanField('is Active ?', validators=[DataRequired()])
 
     password = PasswordField(
         "Password", validators=[DataRequired(), Length(min=6, max=25)]
@@ -36,6 +36,17 @@ class RegisterForm(FlaskForm):
         if user:
             self.email.errors.append("User name already registered")
             return False
+        user = User.query.filter_by(email=self.email.data).first()
+        if user:
+            self.email.errors.append("Email  already registered")
+            return False
+        user = User.query.filter_by(mobile=self.mobile.data).first()
+        if user:
+            self.email.errors.append("Mobil name already registered")
+            return False
+
+
+
         if self.password.data != self.confirm.data:
             self.password.errors.append("Passwords must match")
             return False

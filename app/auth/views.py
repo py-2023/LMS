@@ -56,22 +56,21 @@ def register():
         print("current user authenticate")
         return redirect(url_for("homepage.index"))
     form = RegisterForm(request.form)
+
     if form.validate_on_submit():
         user = User(password=form.password.data, username=form.username.data,
                     mobile=form.mobile.data,
-                    email=form.email.data, is_active=form.is_active.data)
+                    email=form.email.data, is_active=True)
 
         try:
             db.session.add(user)
             db.session.commit()
+            login_user(user)
+            flash("You registered and are now logged in. Welcome!", "success")
         except:
             flash("Unable to commit", "success")
 
-        # https://devpress.csdn.net/python/63044f1f7e6682346619974b.html
-        print("u r registered")
 
-        login_user(user)
-        flash("You registered and are now logged in. Welcome!", "success")
 
         return redirect(url_for("homepage.index"))
     print("not validated")
