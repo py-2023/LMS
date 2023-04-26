@@ -11,7 +11,7 @@ from app import bcrypt, db
 
 class ReturnStatus(enum.Enum):
     RETURNED = "Returned"
-    YETTOBERETRUNED = "Yet to be Returned"
+    PENDING_RETURN = "Yet to be Returned"
 
 
 class User(UserMixin, db.Model):
@@ -85,6 +85,23 @@ class BookIssuanceTracker(db.Model):
     issued_to = db.Column(db.Integer, db.ForeignKey("user.userid"), nullable=True, default=None)  ## with lib users
     issuance_date = db.Column(db.DateTime(), default=None)
     to_be_returned_by_date = db.Column(db.DateTime(), default=None)
+    actual_return_date = db.Column(db.DateTime(), default=None)
+    returnstatus = db.Column(db.Enum(ReturnStatus))
+    entry_created_on = db.Column(db.DateTime, server_default=func.now())
+    entry_updated_on = db.Column(db.DateTime, onupdate=func.now())
+
+
+class BookIssuanceHistory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    book = db.Column(db.Integer, db.ForeignKey("book.id"))
+    title = db.Column(db.String(255))
+    authors = db.Column(db.String(255))
+    publisher = db.Column(db.String(255))
+    edition = db.Column(db.String(255))
+    isbn = db.Column(db.String(255))
+    userid = db.Column(db.Integer)
+    username = db.Column(db.String(200))
+    issuance_date = db.Column(db.DateTime(), default=None)
     actual_return_date = db.Column(db.DateTime(), default=None)
     returnstatus = db.Column(db.Enum(ReturnStatus))
     entry_created_on = db.Column(db.DateTime, server_default=func.now())

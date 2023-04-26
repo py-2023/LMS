@@ -2,13 +2,14 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template
 from flask_login import login_required
+from sqlalchemy import or_
 
 from sqlalchemy.exc import OperationalError
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from app import bcrypt, db
 from app.auth.forms import LoginForm, RegisterForm
-from app.auth.models import User, Book, BookIssuanceTracker
+from app.auth.models import User, Book, BookIssuanceTracker, BookIssuanceHistory
 from app import login_manager  # the variable from Flask-login
 from app.lms.forms import AddBookForm, IssueBookForm, RenewBookForm, SearchBookForm
 
@@ -38,7 +39,7 @@ def addbook():
                 booksforissuance = BookIssuanceTracker()
                 book.issuance.append(booksforissuance)
                 db.session.add(book)
-            db.session.commit()
+                db.session.commit()
 
 
         except:
@@ -72,14 +73,39 @@ def issuebook():
         form = IssueBookForm(request.form)
 
         book_id = int(request.form.get("book"))
+        issued_to = request.form.get("issued_to")
+        issued_to_user = User.query.filter_by(userid=issued_to).all()
 
         bookissuance = BookIssuanceTracker.query.filter_by(book=book_id, issued_to=None).first()
 
-        bookissuance.issued_to = current_user.userid
+        bookissuance.issued_to = issued_to
         bookissuance.bookissuance.availablenoofcopies -= 1  ## using backreference
         bookissuance.issuance_date = datetime.now()
         bookissuance.to_be_returned_by_date = datetime.now() + timedelta(days=7)
         db.session.commit()
+
+        bookIssuanceHistory = BookIssuanceHistory(book=book_id,
+                                                  title=bookissuance.book.title,
+                                                  authors=bookissuance.book.authors,
+                                                  publisher=bookissuance.book.publisher,
+                                                  edition=bookissuance.book.edition,
+                                                  isbn=bookissuance.book.isbn,
+                                                  userid=issued_to_user.userid,
+                                                  username=issued_to_user.username,
+                                                  issuance_date=bookissuance.issuance_date,
+                                                  actual_return_date=bookissuance.actual_return_date,
+                                                  returnstatus="PENDING_RETURN"
+                                                  )
+
+        try:
+
+            db.session.add(bookIssuanceHistory)
+            db.session.commit()
+
+
+        except:
+            flash("Unable to commit", "success")
+
         flash("Book issued ")
         return render_template(
             "lms/issuebook.html", books=Book.query.all(), form=form)
@@ -91,7 +117,7 @@ def returnbook():
     if request.method == 'GET':
         form = IssueBookForm(request.form)
         # list the books
-        booksissued = BookIssuanceTracker.query.filter_by(issued_to=current_user.userid).all()
+        booksissued = BookIssuanceTracker.query.filter_by().all()
         if booksissued:
             return render_template("lms/returnbook.html", booksissued=booksissued, form=form)
         flash("No Return Pending")
@@ -102,18 +128,39 @@ def returnbook():
     if request.method == 'POST':
         # issue book
         form = IssueBookForm(request.form)
+        datetimenow = datetime.now()
 
         book_id = int(request.form.get("book"))
+        issued_to = request.form.get("issued_to")
+        issued_to_user = User.query.filter_by(userid=issued_to).all()
 
-        bookissuance = BookIssuanceTracker.query.filter_by(book=book_id, issued_to=current_user.userid).first()
+        bookissuance = BookIssuanceTracker.query.filter_by(book=book_id).first()
+        bookissuedto = bookissuance.issued_to
+        issuance_date = bookissuance.issuance_date
 
         bookissuance.issued_to = None
         bookissuance.bookissuance.availablenoofcopies += 1  ## using backreference
         bookissuance.issuance_date = None
         bookissuance.to_be_returned_by_date = None
-        bookissuance.actual_return_date = datetime.now()
+        bookissuance.actual_return_date = datetimenow
+        bookissuance.returnstatus = "RETURNED"
         db.session.commit()
         flash("Book Returned ")
+
+        try:
+            # using issuance date as part of filter to identify the record
+            bookissuance = BookIssuanceHistory.query.filter_by(book=book_id, userid=bookissuedto,
+                                                               issuance_date=issuance_date).first()
+
+            bookissuance.actual_return_date = datetimenow
+            bookissuance.returnstatus = "RETURNED"
+
+            db.session.commit()
+
+
+        except:
+            flash("Unable to commit", "success")
+
         return render_template(
             "lms/returnbook.html", books=BookIssuanceTracker.query.filter_by(issued_to=current_user.userid).all(),
             form=form)
@@ -124,8 +171,9 @@ def returnbook():
 def renewbook():
     if request.method == 'GET':
         form = IssueBookForm(request.form)
-        # list the books
-        booksissued = BookIssuanceTracker.query.filter_by(issued_to=current_user.userid).all()
+        # list the books which are issued for renewal screen
+        booksissued = BookIssuanceTracker.query.filter(or_(BookIssuanceTracker.issued_to is None)).all()
+
         if booksissued:
             return render_template("lms/renewbook.html", booksissued=booksissued, form=form)
         flash("No Return Pending")
@@ -142,6 +190,10 @@ def renewbook():
         bookissuance = BookIssuanceTracker.query.filter_by(book=book_id, issued_to=current_user.userid).first()
 
         # bookissuance.bookissuance.availablenoofcopies += 1  ## using backreference
+        bookissuedto = bookissuance.issued_to
+        issuance_date = bookissuance.issuance_date
+        newreturndate=datetime.now() + timedelta(days=7)
+
         bookissuance.issued_to = current_user.userid
         bookissuance.issuance_date = datetime.now()
         bookissuance.to_be_returned_by_date = datetime.now() + timedelta(days=7)
@@ -149,11 +201,26 @@ def renewbook():
 
         bookissuance.issuance_date = None
         bookissuance.to_be_returned_by_date = None
-        bookissuance.actual_return_date = datetime.now()
+        bookissuance.actual_return_date = newreturndate
         db.session.commit()
         flash("Book Re-Issued")
+        booksissued = BookIssuanceTracker.query.filter(or_(BookIssuanceTracker.issued_to is None)).all()
+
+        try:
+            # using issuance date as part of filter to identify the record
+            bookissuance = BookIssuanceHistory.query.filter_by(book=book_id, userid=bookissuedto,
+                                                               issuance_date=issuance_date).first()
+
+            bookissuance.actual_return_date =newreturndate
+
+            db.session.commit()
+
+
+        except:
+            flash("Unable to commit", "success")
+
         return render_template(
-            "lms/renewbook.html", books=BookIssuanceTracker.query.filter_by(issued_to=current_user.userid).all(),
+            "lms/renewbook.html", books=booksissued,
             form=form)
 
 
@@ -201,3 +268,16 @@ def searchbook():
         flash("No Books matching name")
         return render_template(
             "lms/searchbook.html", searchresult=Book.query.filter_by(title=title).all(), form=form)
+
+
+@lms_bp.route("/listmembers", methods=["GET", "POST"])
+@login_required
+def listmembers():
+    if request.method == 'GET':
+        users = User.query.filter_by().all()
+        if users:
+            return render_template("lms/memberlist.html", users=users)
+        flash("user list")
+        return render_template(
+            "lms/memberlist.html",
+            users=users)

@@ -1,10 +1,48 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <title>$Title$</title>
-</head>
-<body>
-$END$
-</body>
-</html>
+
+
+
+{% extends "common-fragments/layout.html" %}
+
+
+
+
+{% block content %}
+<h3>Members List</h3>
+
+    <br>
+    <table class="table">
+  <thead>
+    <tr>
+      <th scope="col">User ID</th>
+      <th scope="col">User Name</th>
+      <th scope="col">Email</th>
+      <th scope="col">Mobile No</th>
+      <th scope="col">Is Active</th>
+    </tr>
+  </thead>
+  <tbody>
+
+  {% for user in users %}
+
+    <tr>
+
+      <td>{{ user.userid }}</td>
+       <td>{{ user.username }}</td>
+       <td>{{ user.email }}</td>
+       <td>{{ user.mobile }}</td>
+       <td>{{ user.is_active }}</td>
+
+    </tr>
+
+    {% endfor %}
+  </tbody>
+</table>
+
+
+
+
+
+
+
+
+{% endblock %}

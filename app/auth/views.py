@@ -51,30 +51,54 @@ def logout():
 
 @auth_bp.route("/register", methods=["GET", "POST"])
 def register():
-    if current_user.is_authenticated:
-        flash("You are already registered.", "info")
-        print("current user authenticate")
-        return redirect(url_for("homepage.index"))
-    form = RegisterForm(request.form)
-
-    if form.validate_on_submit():
-        user = User(password=form.password.data, username=form.username.data,
-                    mobile=form.mobile.data,
-                    email=form.email.data, is_active=True)
-
-        try:
-            db.session.add(user)
-            db.session.commit()
-            login_user(user)
-            flash("You registered and are now logged in. Welcome!", "success")
-        except:
-            flash("Unable to commit", "success")
 
 
+    #if current_user.is_authenticated:
+    #    flash("You are already registered.", "info")
+    #    print("current user authenticate")
+    #    return redirect(url_for("homepage.index"))
 
-        return redirect(url_for("homepage.index"))
-    print("not validated")
-    print(form.errors)
-    print(form)
+    if request.method == 'GET':
 
-    return render_template("authentication/register.html", form=form)
+        form = RegisterForm(request.form)
+        #flash("Add User", "success")
+        return render_template("authentication/register.html", form=form)
+
+    if request.method == 'POST':
+        form = RegisterForm(request.form)
+
+
+        if form.validate():
+            users = User.query.filter().all()
+            if users:
+
+                user = User(password=form.password.data, username=form.username.data,
+                        mobile=form.mobile.data,
+                        email=form.email.data, is_active=True,is_admin=False)
+            else:
+                # if no users, attach admin rights to first user created in the system
+                # is Admin column in db is set to 1
+                user = User(password=form.password.data, username=form.username.data,
+                            mobile=form.mobile.data,
+                            email=form.email.data, is_active=True, is_admin=True)
+
+
+            try:
+                db.session.add(user)
+                db.session.commit()
+                #login_user(user)
+                flash("The user registration is complete with member id  :  "+str(user.userid)+"    ", "success")
+            except:
+                flash("Unable to save", "success")
+
+
+            return redirect(url_for("authentication.register"))
+        print(" validation failed")
+        print(form.errors)
+        print(form)
+
+        return render_template("authentication/register.html", form=form)
+
+
+
+
