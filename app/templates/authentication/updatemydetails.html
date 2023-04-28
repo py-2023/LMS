@@ -6,9 +6,9 @@
   <div class="col-md-4"></div>
   <div class="col-md-4">
     <main class="form-signin w-100 m-auto">
-      <form role="form" method="post" action="/updateuser">
+      <form role="form" method="post" action="/updatemydetails">
         {{ form.csrf_token }}
-        <h1 class="h3 mb-3 fw-normal text-center">Update Details</h1>
+        <h1 class="h3 mb-3 fw-normal text-center">Update Details</h1> 
 
       <div class="form-floating" value="{{ form.userid }}">
           {{ form.userid(placeholder="username", class="form-control mb-2 ", readonly="True" ) }}

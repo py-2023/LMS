@@ -30,7 +30,6 @@ def addbook():
 
         return render_template("lms/addbook.html", form=form)
 
-
     if request.method == 'POST':
 
         form = AddBookForm(request.form)
@@ -38,7 +37,8 @@ def addbook():
             totalnoofcopies = form.totalnoofcopies.data
             book = Book(title=form.title.data, authors=form.authors.data, publisher=form.publisher.data,
                         edition=form.edition.data, shelfnum=form.shelfnum.data,
-                        isbn=form.isbn.data, description=form.description.data, totalnoofcopies=form.totalnoofcopies.data,
+                        isbn=form.isbn.data, description=form.description.data,
+                        totalnoofcopies=form.totalnoofcopies.data,
                         availablenoofcopies=form.totalnoofcopies.data)
 
             try:
@@ -72,8 +72,8 @@ def issuebook():
         books = Book.query.filter(Book.availablenoofcopies > 0).all()
         ## To remove librarian from the person to whom book is to be issued
         ## user with isadmin=True is librarian
-        #users = User.query.filter_by(is_admin=False).all()
-        users = User.query.filter(and_(User.is_admin==False,User.is_active==True)).all()
+        # users = User.query.filter_by(is_admin=False).all()
+        users = User.query.filter(and_(User.is_admin == False, User.is_active == True)).all()
 
         if books:
             return render_template("lms/issuebook.html", books=Book.query.all(), users=users, form=form)
@@ -133,8 +133,8 @@ def returnbook():
         form = IssueBookForm(request.form)
         # list the books
 
-        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.actual_return_date == None,BookIssuanceTracker.issued_to != None).all()
-
+        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.actual_return_date == None,
+                                                       BookIssuanceTracker.issued_to != None).all()
 
         if booksissued:
             return render_template("lms/returnbook.html", booksissued=booksissued, form=form)
@@ -153,8 +153,6 @@ def returnbook():
         issued_to_user = User.query.filter_by(userid=issued_to).all()
 
         bookissuance = BookIssuanceTracker.query.filter_by(book=book_id).first()
-
-
 
         bookissuedto = bookissuance.issued_to
         issuance_date = bookissuance.issuance_date
@@ -184,7 +182,8 @@ def returnbook():
             print(error)
             flash("Unable to commit" + str(error), "success")
 
-        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.actual_return_date == None,BookIssuanceTracker.issued_to != None).all()
+        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.actual_return_date == None,
+                                                       BookIssuanceTracker.issued_to != None).all()
 
         return render_template(
             "lms/returnbook.html",
@@ -259,14 +258,14 @@ def issuedbook():
         flash("No Books issued")
         return render_template(
             "lms/issuedbooks.html",
-            booksissued = booksissued)
+            booksissued=booksissued)
 
     if request.method == 'POST':
         # issue book
 
         return render_template(
             "lms/issuedbooks.html",
-            booksissued= BookIssuanceTracker.query.filter(BookIssuanceTracker.issued_to != None).all())
+            booksissued=BookIssuanceTracker.query.filter(BookIssuanceTracker.issued_to != None).all())
 
 
 @lms_bp.route("/searchbooks", methods=["GET", "POST"])
@@ -288,7 +287,8 @@ def searchbook():
 
         title = str(request.form.get("title"))
 
-        searchresult=Book.query.filter(or_(Book.title.contains(title),Book.authors.contains(title),Book.isbn.contains(title))).all()
+        searchresult = Book.query.filter(
+            or_(Book.title.contains(title), Book.authors.contains(title), Book.isbn.contains(title))).all()
         if searchresult:
             return render_template("lms/searchbook.html", searchresult=searchresult, form=form)
         flash("No Books matching name or authors or isbn")
@@ -323,13 +323,6 @@ def listmembers():
         return render_template("authentication/updateuser.html", form=form)
 
 
-
-
-
-
-
-
-
 @lms_bp.route("/bookhistory", methods=["GET", "POST"])
 @login_required
 def bookhistory():
@@ -341,3 +334,84 @@ def bookhistory():
         return render_template(
             "lms/bookhistory.html",
             bookrecords=bookrecords)
+
+
+@lms_bp.route("/myissuedbookslist", methods=["GET", "POST"])
+@login_required
+def myissuedbookslist():
+    if request.method == 'GET':
+        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.issued_to == current_user.userid).all()
+        # booksissued = BookIssuanceTracker.query.filter_by(issued_to=current_user.userid).all()
+        if booksissued:
+            return render_template("lms/issuedbooks.html", booksissued=booksissued)
+        flash("No Books issued")
+        return render_template(
+            "lms/issuedbooks.html",
+            booksissued=booksissued)
+
+    if request.method == 'POST':
+        # issue book
+
+        return render_template(
+            "lms/issuedbooks.html",
+            booksissued=BookIssuanceTracker.query.filter(BookIssuanceTracker.issued_to == current_user.userid).all())
+
+
+@lms_bp.route("/myissuedbookshistory", methods=["GET", "POST"])
+@login_required
+def myissuedbookshistory():
+    if request.method == 'GET':
+        bookrecords = BookIssuanceHistory.query.filter_by(userid=current_user.userid).all()
+        if bookrecords:
+            return render_template("lms/bookhistory.html", bookrecords=bookrecords)
+        flash("No Records Available")
+        return render_template(
+            "lms/bookhistory.html",
+            bookrecords=bookrecords)
+
+
+@lms_bp.route("/updatemydetails", methods=["GET", "POST"])
+@login_required
+def updatemydetails():
+    if request.method == 'GET':
+        user = User.query.filter_by(userid=current_user.userid).first()
+        form = UpdateForm(request.form)
+
+        form.userid.data = user.userid
+        form.username.data = user.username
+        form.mobile.data = user.mobile
+        form.email.data = user.email
+
+        return render_template("authentication/updatemydetails.html", form=form)
+
+
+    if request.method == 'POST':
+        form = UpdateForm(request.form)
+
+        if form.validate():
+            user = User.query.filter_by(userid=form.userid.data).first()
+            user.email = form.email.data
+            user.username = form.username.data
+            user.mobile = form.mobile.data
+            user.password = bcrypt.generate_password_hash(form.password.data )
+
+            try:
+                db.session.add(user)
+                db.session.commit()
+                # login_user(user)
+                flash("The user updation is complete for member id  :  " + str(user.userid) + "    ", "success")
+            except:
+                flash("Unable to update", "success")
+
+            return redirect(url_for("homepage.index"))
+        print(" validation failed")
+        print(form.errors)
+        print(form)
+
+        return render_template("authentication/updateuser.html", form=form)
+
+
+
+
+
+

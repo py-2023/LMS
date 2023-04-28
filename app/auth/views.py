@@ -119,3 +119,11 @@ def updateuser():
         print(form)
 
         return render_template("authentication/updateuser.html", form=form)
+
+
+
+
+
+
+
+
