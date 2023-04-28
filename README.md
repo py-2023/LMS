@@ -2,7 +2,7 @@
 
 New Features - 29-04-2023
 -------------
-1. Login with selecting username from dorpdown
+1. Login with selecting username from dropdown
 2. Two separate views for librarian login and normal member login
 3. Normal member Menus-
     View Current Issued Books
