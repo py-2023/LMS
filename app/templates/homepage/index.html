@@ -160,7 +160,54 @@
      {% elif not current_user.is_admin %}
 
 
-             not admin
+            <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">View My Currently Issued Books</h5>
+
+       <a href="/myissuedbookslist" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+
+            <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">View My Book Issue History</h5>
+
+       <a href="/myissuedbookshistory" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+
+            <div class="col">
+   <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
+
+  <div class="card-body">
+    <h5 class="card-title"></h5>
+      <h5 class="card-text">Update My Details</h5>
+
+       <a href="/updatemydetails" class="card-text stretched-link"></a>
+  </div>
+</div>
+  </div>
+
+
+
+
+
+
+
+
+
 
              {% else %}
                {% endif %}

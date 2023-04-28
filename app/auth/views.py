@@ -23,6 +23,7 @@ def load_user(userid):
 @auth_bp.route("/login", methods=["GET", "POST"])
 def login():
     form = LoginForm(request.form)
+    users = User.query.filter( User.is_active == True).all()
     if form.validate_on_submit():
         print("validating form")
         user = User.query.filter(or_(User.username == form.userid.data, User.userid == form.userid.data, User.email == form.userid.data)).first()
@@ -34,8 +35,8 @@ def login():
             return redirect(url_for("homepage.index"))
         else:
             flash("Invalid email and/or password.", "danger")
-            return render_template("authentication/login.html", form=form)
-    return render_template("authentication/login.html", form=form)
+            return render_template("authentication/login.html", form=form,users=users)
+    return render_template("authentication/login.html", form=form,users=users)
 
 
 @auth_bp.route("/logout")

@@ -2,7 +2,7 @@ from datetime import datetime, timedelta
 
 from flask import Blueprint, render_template
 from flask_login import login_required
-from sqlalchemy import or_
+from sqlalchemy import or_, and_
 
 from sqlalchemy.exc import OperationalError
 from flask import Blueprint, flash, redirect, render_template, request, url_for
@@ -70,7 +70,11 @@ def issuebook():
         form = IssueBookForm(request.form)
         # list the books
         books = Book.query.filter(Book.availablenoofcopies > 0).all()
-        users = User.query.filter_by().all()
+        ## To remove librarian from the person to whom book is to be issued
+        ## user with isadmin=True is librarian
+        #users = User.query.filter_by(is_admin=False).all()
+        users = User.query.filter(and_(User.is_admin==False,User.is_active==True)).all()
+
         if books:
             return render_template("lms/issuebook.html", books=Book.query.all(), users=users, form=form)
         flash("Books Available  for issue: 0")

@@ -14,10 +14,24 @@
 
 
         <div class="form-floating">
-          <input class="form-control mb-2" id="userid" name="userid" placeholder="userid" required type="text" value="">
-          <label for="userid">User Name or User Id or Email </label>
+
+
+              <select name="userid" class="form-control" required autofocus placeholder='Select Login'>
+
+       <option value='' name='userid'> Select Login  </option>
+        {% for user in users %}
+
+            <option value='{{ user.userid }}' name='userid'> {{ user.username }}  </option>
+
+      {% endfor %}
+        </select>
+
 
         </div>
+
+      <br>
+
+
         <div class="form-floating">
           <input class="form-control mb-2" id="password" name="password" placeholder="password" required type="password" value="">
           <label for="password">Password</label>
