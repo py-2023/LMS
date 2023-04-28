@@ -24,6 +24,8 @@ When the book is returned the available copy of the book is incremented and the 
 If all the copies of the book are issued then it won't appear in the available for issue list
 This is managed using the available copy column in the book data model
 
+
+![img_1.png](img_1.png)
 --------------------------------------------
 Flask  framework is used
 https://flask.palletsprojects.com/en/2.3.x/
