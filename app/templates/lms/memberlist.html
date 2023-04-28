@@ -19,6 +19,8 @@
       <th scope="col">Email</th>
       <th scope="col">Mobile No</th>
       <th scope="col">Is Active</th>
+      <th scope="col">Update Details/ Password</th>
+
     </tr>
   </thead>
   <tbody>
@@ -32,6 +34,21 @@
        <td>{{ user.email }}</td>
        <td>{{ user.mobile }}</td>
        <td>{{ user.is_active }}</td>
+     <td>
+         <form class= "container-fluid" style="width: 60%;" method="post" action="/listmembers">
+
+{{ form.csrf_token }}
+
+
+          <input class="invisible" name="book" required type="hidden" value='{{ user.userid}}' >
+
+
+
+
+    <button class='btn btn-sm btn-warning btn-block' type='submit'>Update</button>
+</form>
+
+     </td>
 
     </tr>
 

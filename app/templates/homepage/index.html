@@ -23,6 +23,13 @@
     <div class="row row-cols-1 row-cols-md-3 g-4">
 
 
+         {% if   current_user.is_admin %}
+
+
+
+
+
+
   <div class="col">
    <div class="card text-center text-white bg-warning mb-3" style="max-width: 18rem; height: 7rem">
 
@@ -147,6 +154,22 @@
   </div>
 </div>
   </div>
+
+
+
+     {% elif not current_user.is_admin %}
+
+
+             not admin
+
+             {% else %}
+               {% endif %}
+
+
+
+
+
+
 
 
 

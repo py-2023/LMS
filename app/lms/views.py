@@ -8,7 +8,7 @@ from sqlalchemy.exc import OperationalError
 from flask import Blueprint, flash, redirect, render_template, request, url_for
 from flask_login import login_required, login_user, logout_user, current_user
 from app import bcrypt, db
-from app.auth.forms import LoginForm, RegisterForm
+from app.auth.forms import LoginForm, RegisterForm, UpdateForm
 from app.auth.models import User, Book, BookIssuanceTracker, BookIssuanceHistory
 from app import login_manager  # the variable from Flask-login
 from app.lms.forms import AddBookForm, IssueBookForm, RenewBookForm, SearchBookForm
@@ -296,13 +296,34 @@ def searchbook():
 @login_required
 def listmembers():
     if request.method == 'GET':
+        form = UpdateForm(request.form)
         users = User.query.filter_by().all()
         if users:
-            return render_template("lms/memberlist.html", users=users)
+            return render_template("lms/memberlist.html", users=users, form=form)
         flash("user list")
         return render_template(
             "lms/memberlist.html",
             users=users)
+
+    if request.method == 'POST':
+        userid = int(request.form.get("book"))
+
+        user = User.query.filter_by(userid=userid).first()
+        form = UpdateForm(request.form)
+
+        form.userid.data = user.userid
+        form.username.data = user.username
+        form.mobile.data = user.mobile
+        form.email.data = user.email
+
+        return render_template("authentication/updateuser.html", form=form)
+
+
+
+
+
+
+
 
 
 @lms_bp.route("/bookhistory", methods=["GET", "POST"])
