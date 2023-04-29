@@ -2,7 +2,7 @@
 
   Access to admin user links is restricted to users with isAdmin flag as 1  ( librarian)
 
-  Once all copies of a boo are issued, the issue book drop down will not show any book to issue till any books are returned.
+  Once all copies of a book are issued, the issue book drop down will not show any book to issue till any books are returned.
 
 New Features - 29-04-2023
 -------------
