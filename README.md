@@ -1,5 +1,8 @@
 # LMS
 
+  Access to admin user links is restricted to users with isAdmin flag as 1  ( librarian)
+
+
 New Features - 29-04-2023
 -------------
 1. Login with selecting username from dropdown
