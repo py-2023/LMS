@@ -25,6 +25,7 @@ def load_user(userid):
 @lms_bp.route("/addbook", methods=["GET", "POST"])
 @login_required
 def addbook():
+
     if request.method == 'GET':
         form = AddBookForm(request.form)
 
@@ -97,6 +98,7 @@ def issuebook():
         print("#############Available copy -1 ")
         bookissuance.issuance_date = datetime.now()
         bookissuance.to_be_returned_by_date = datetime.now() + timedelta(days=7)
+        db.session.add(bookissuance)
         db.session.commit()
 
         bookIssuanceHistory = BookIssuanceHistory(book=book_id,
@@ -134,8 +136,7 @@ def returnbook():
         form = IssueBookForm(request.form)
         # list the books
 
-        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.actual_return_date == None,
-                                                       BookIssuanceTracker.issued_to != None).all()
+        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.issued_to != None).all()
 
         if booksissued:
             return render_template("lms/returnbook.html", booksissued=booksissued, form=form)
@@ -162,8 +163,9 @@ def returnbook():
         bookissuance.bookissuance.availablenoofcopies += 1  ## using backreference
         bookissuance.issuance_date = None
         bookissuance.to_be_returned_by_date = None
-        bookissuance.actual_return_date = datetimenow
-        bookissuance.returnstatus = "RETURNED"
+        bookissuance.actual_return_date = None
+        bookissuance.returnstatus = None
+        db.session.add(bookissuance)
         db.session.commit()
         flash("Book Returned ")
 
@@ -183,8 +185,7 @@ def returnbook():
             print(error)
             flash("Unable to commit" + str(error), "success")
 
-        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.actual_return_date == None,
-                                                       BookIssuanceTracker.issued_to != None).all()
+        booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.issued_to != None).all()
 
         return render_template(
             "lms/returnbook.html",
@@ -221,6 +222,7 @@ def renewbook():
 
         # bookissuance.issuance_date = datetime.now()
         bookissuance.to_be_returned_by_date = newreturndate
+        db.session.add(bookissuance)
         db.session.commit()
 
         flash("Book Re-Issued")
@@ -233,8 +235,8 @@ def renewbook():
 
             bookissuance.actual_return_date = None
 
+            db.session.add(bookissuance)
             db.session.commit()
-
 
 
         except Exception as error:
