@@ -78,7 +78,7 @@ def issuebook():
         if books:
             return render_template("lms/issuebook.html", books=Book.query.all(), users=users, form=form)
         flash("Books Available  for issue: 0")
-        users = User.query.all()
+        users = User.query.filter(and_(User.is_admin == False, User.is_active == True)).all()
         return render_template(
             "lms/issuebook.html", books=Book.query.all(), users=users, form=form)
 
@@ -94,6 +94,7 @@ def issuebook():
         book = Book.query.filter_by(id=book_id).first()
         bookissuance.issued_to = issued_to
         bookissuance.bookissuance.availablenoofcopies -= 1  ## using backreference
+        print("#############Available copy -1 ")
         bookissuance.issuance_date = datetime.now()
         bookissuance.to_be_returned_by_date = datetime.now() + timedelta(days=7)
         db.session.commit()
@@ -121,7 +122,7 @@ def issuebook():
             flash("Unable to commit", "success")
 
         flash("Book issued ")
-        users = User.query.all()
+        users = User.query.filter(and_(User.is_admin == False, User.is_active == True)).all()
         return render_template(
             "lms/issuebook.html", books=Book.query.all(), users=users, form=form)
 
@@ -152,7 +153,7 @@ def returnbook():
         issued_to = request.form.get("issued_to")
         issued_to_user = User.query.filter_by(userid=issued_to).all()
 
-        bookissuance = BookIssuanceTracker.query.filter_by(book=book_id).first()
+        bookissuance = BookIssuanceTracker.query.filter(BookIssuanceTracker.book==book_id,BookIssuanceTracker.issued_to==issued_to).first()
 
         bookissuedto = bookissuance.issued_to
         issuance_date = bookissuance.issuance_date
