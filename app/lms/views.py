@@ -22,9 +22,19 @@ def load_user(userid):
     return User.query.get(int(userid))
 
 
+
+
+
+
 @lms_bp.route("/addbook", methods=["GET", "POST"])
 @login_required
 def addbook():
+    if not current_user.is_admin:
+        flash("Access restricted to librarian", "success")
+        return redirect(url_for("homepage.index"))
+
+
+
 
     if request.method == 'GET':
         form = AddBookForm(request.form)
@@ -67,6 +77,10 @@ def addbook():
 @lms_bp.route("/issuebook", methods=["GET", "POST"])
 @login_required
 def issuebook():
+    if not current_user.is_admin:
+        flash("Access restricted to librarian", "success")
+        return redirect(url_for("homepage.index"))
+
     if request.method == 'GET':
         form = IssueBookForm(request.form)
         # list the books
@@ -132,6 +146,9 @@ def issuebook():
 @lms_bp.route("/returnbook", methods=["GET", "POST"])
 @login_required
 def returnbook():
+    if not current_user.is_admin:
+        flash("Access restricted to librarian", "success")
+        return redirect(url_for("homepage.index"))
     if request.method == 'GET':
         form = IssueBookForm(request.form)
         # list the books
@@ -196,6 +213,9 @@ def returnbook():
 @lms_bp.route("/renewbook", methods=["GET", "POST"])
 @login_required
 def renewbook():
+    if not current_user.is_admin:
+        flash("Access restricted to librarian", "success")
+        return redirect(url_for("homepage.index"))
     if request.method == 'GET':
         form = IssueBookForm(request.form)
         # list the books which are issued for renewal screen
@@ -253,6 +273,9 @@ def renewbook():
 @lms_bp.route("/issuedbooks", methods=["GET", "POST"])
 @login_required
 def issuedbook():
+    if not current_user.is_admin:
+        flash("Access restricted to librarian", "success")
+        return redirect(url_for("homepage.index"))
     if request.method == 'GET':
         booksissued = BookIssuanceTracker.query.filter(BookIssuanceTracker.issued_to != None).all()
         # booksissued = BookIssuanceTracker.query.filter_by(issued_to=current_user.userid).all()
@@ -274,6 +297,9 @@ def issuedbook():
 @lms_bp.route("/searchbooks", methods=["GET", "POST"])
 @login_required
 def searchbook():
+    if not current_user.is_admin:
+        flash("Access restricted to librarian", "success")
+        return redirect(url_for("homepage.index"))
     if request.method == 'GET':
         form = SearchBookForm(request.form)
         # list the books
@@ -302,6 +328,9 @@ def searchbook():
 @lms_bp.route("/listmembers", methods=["GET", "POST"])
 @login_required
 def listmembers():
+    if not current_user.is_admin:
+        flash("Access restricted to librarian", "success")
+        return redirect(url_for("homepage.index"))
     if request.method == 'GET':
         form = UpdateForm(request.form)
         users = User.query.filter_by().all()
@@ -329,6 +358,9 @@ def listmembers():
 @lms_bp.route("/bookhistory", methods=["GET", "POST"])
 @login_required
 def bookhistory():
+    if not current_user.is_admin:
+        flash("Access restricted to librarian", "success")
+        return redirect(url_for("homepage.index"))
     if request.method == 'GET':
         bookrecords = BookIssuanceHistory.query.filter_by().all()
         if bookrecords:
